@@ -1,8 +1,10 @@
 const containerVideos = document.querySelector(".videos__container")
 
-const api = fetch("http://localhost:3000/videos")
-.then(res => res.json())
-.then((videos) => 
+async function buscarEMostrarVideos() {
+
+    const busca = await fetch("http://localhost:3000/videos");
+    const videos = await busca.json();
+
     videos.forEach((video) => {
         containerVideos.innerHTML += `
             <li class="videos__item">
@@ -11,10 +13,11 @@ const api = fetch("http://localhost:3000/videos")
                 title="${video.titulo}" 
                 frameborder="0" 
                 allowfullscreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" >
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow="compute-pressure" >
                 </iframe>
                 <div class="descricao-video">
-                    <img class="img-canal" src="${video.imagem} alt="logo do canal">
+                    <img class="img-canal" src="${video.imagem}" alt="logo do canal">
                     <h3 class="titulo-video">${video.titulo}</h3>
                     <p class="titulo-canal">${video.descricao}</p>
                     <p class="categoria" hidden>${video.categoria}</p>
@@ -23,7 +26,7 @@ const api = fetch("http://localhost:3000/videos")
             </li>
         `;
     })
-)
-.catch((error) => {
-    containerVideos.innerHTML = `<p>Houve um erro ao carregar os vídeos: ${error}</p>`;
-})
+   
+}
+
+buscarEMostrarVideos();
