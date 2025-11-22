@@ -2,30 +2,41 @@ const containerVideos = document.querySelector(".videos__container")
 
 async function buscarEMostrarVideos() {
 
-    const busca = await fetch("http://localhost:3000/videos");
-    const videos = await busca.json();
+    try {
 
-    videos.forEach((video) => {
-        containerVideos.innerHTML += `
-            <li class="videos__item">
-                <iframe 
-                src="${video.url}" 
-                title="${video.titulo}" 
-                frameborder="0" 
-                allowfullscreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allow="compute-pressure" >
-                </iframe>
-                <div class="descricao-video">
-                    <img class="img-canal" src="${video.imagem}" alt="logo do canal">
-                    <h3 class="titulo-video">${video.titulo}</h3>
-                    <p class="titulo-canal">${video.descricao}</p>
-                    <p class="categoria" hidden>${video.categoria}</p>
-                </div>
+        const busca = await fetch("http://localhost:3000/videos");
+        const videos = await busca.json();
 
-            </li>
-        `;
-    })
+        videos.forEach((video) => {
+            if(video.categoria == "") {
+                throw new Error("Vídeo não tem categoria");
+            }
+            containerVideos.innerHTML += `
+                <li class="videos__item">
+                    <iframe 
+                    src="${video.url}" 
+                    title="${video.titulo}" 
+                    frameborder="0" 
+                    allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allow="compute-pressure" >
+                    </iframe>
+                    <div class="descricao-video">
+                        <img class="img-canal" src="${video.imagem}" alt="logo do canal">
+                        <h3 class="titulo-video">${video.titulo}</h3>
+                        <p class="titulo-canal">${video.descricao}</p>
+                        <p class="categoria" hidden>${video.categoria}</p>
+                    </div>
+
+                </li>
+            `;
+        })
+
+    } catch(error) {
+        containerVideos.innerHTML = `<p>Houve um erro ao carregar os videos: ${error}</p>`;
+    } /*finally {
+        alert("Isso sempre acontece!")
+    }*/
    
 }
 
